@@ -88,6 +88,7 @@ body {
 .form-group > input[type="text"] {
   display: inline-block;
   margin-top: 0.4rem;
+  margin-bottom: 0.4rem;
 }
 .btn {
   padding: 0.8rem 1rem 0.7rem;
