@@ -1,83 +1,93 @@
 import React, { useState } from "react";
 
-export default function Todo(props) {
+//export default function Todo(props) {
+  export default class App extends React.Component {
   
-  const [isEditing, setEditing] = useState(false);
-  const [newName, setNewName] = useState('');
+    constructor(props) {
+      super(props);
+      this.state = {
+        isEditing: false,
+        newName: '',
+      }
+      this.handleChange = this.handleChange.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
+    }
 
-  function handleChange(e) {
-    setNewName(e.target.value);
+  handleChange(e) {
+    this.setState({ newName: e.target.value });
   }
 
-  function handleSubmit(e) {
+  handleSubmit(e) {
     e.preventDefault();
-    props.editTask(props.id, newName);
-    setNewName("");
-    setEditing(false);
+    this.props.editTask(this.props.id, this.state.newName);
+    this.setState({ newName: '' });
+    this.setState({ isEditing: false });
   }
   
 
-  const editingTemplate = (
-<form className="stack-small" onSubmit={handleSubmit}>
+  editingTemplate = (
+<form className="stack-small" onSubmit={this.handleSubmit}>
       <div className="form-group">
-        <label className="todo-label" htmlFor={props.id}>
-          New name for {props.name}
+        <label className="todo-label" htmlFor={this.props.id}>
+          New name for {this.props.name}
         </label>
         <input
-  id={props.id}
+  id={this.props.id}
   className="todo-text"
   type="text"
-  value={newName}
-  onChange={handleChange}
+  value={this.newName}
+  onChange={this.handleChange}
 />
       </div>
       <div className="btn-group">
       <button
         type="button"
         className="btn todo-cancel"
-        onClick={() => setEditing(false)}
+        onClick={() => this.setState({ isEditing: false })}
       >
           Cancel
-          <span className="visually-hidden">renaming {props.name}</span>
+          <span className="visually-hidden">renaming {this.props.name}</span>
         </button>
         <button 
           type="submit" 
           className="btn btn__primary todo-edit"
         >
           Save
-          <span className="visually-hidden">new name for {props.name}</span>
+          <span className="visually-hidden">new name for {this.props.name}</span>
         </button>
       </div>
     </form>
   );
-  const viewTemplate = (
+  
+  viewTemplate = (
     <div className="stack-small">
       <div className="c-cb">
           <input
-            id={props.id}
+            id={this.props.id}
             type="checkbox"
-            defaultChecked={props.completed}
-            onChange={() => props.toggleTaskCompleted(props.id)}
+            defaultChecked={this.props.completed}
+            onChange={() => this.props.toggleTaskCompleted(this.props.id)}
           />
-          <label className="todo-label" htmlFor={props.id}>
-            {props.name}
+          <label className="todo-label" htmlFor={this.props.id}>
+            {this.props.name}
           </label>
         </div>
         <div className="btn-group">
-          <button type="button" className="btn" onClick={() => setEditing(true)}>
-            Edit <span className="visually-hidden">{props.name}</span>
+          <button type="button" className="btn" onClick={() => this.setState({ isEditing: true })}>
+            Edit <span className="visually-hidden">{this.props.name}</span>
           </button>
           <button
             type="button"
             className="btn btn__danger"
-            onClick={() => props.deleteTask(props.id)}
+            onClick={() => this.props.deleteTask(this.props.id)}
           >
-            Delete <span className="visually-hidden">{props.name}</span>
+            Delete <span className="visually-hidden">{this.props.name}</span>
           </button>
         </div>
     </div>
   );
 
-  return <li className="todo">{isEditing ? editingTemplate : viewTemplate}</li>;
-
+  render() {
+    return <li className="todo">{this.isEditing ? this.editingTemplate : this.viewTemplate}</li>;
+  }
 }
