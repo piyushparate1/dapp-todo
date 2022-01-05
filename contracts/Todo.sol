@@ -13,6 +13,9 @@ contract Todo
 
   constructor() 
   {
+    todoCollection[msg.sender].push(ToDoItem("Hello World!!", false));
+    todoCollection[msg.sender].push(ToDoItem("Task #1", false));
+    todoCollection[msg.sender].push(ToDoItem("Task #2", false));
   }
 
   function Add(string calldata todoContent) public
