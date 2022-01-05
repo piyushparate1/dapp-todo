@@ -1,29 +1,34 @@
-import logo from './logo.svg';
 import './App.css';
 import { nanoid } from "nanoid";
-import React, { useState } from "react";
+import React from "react";
 import Form from "./components/Form";
 import FilterButton from "./components/FilterButton";
 import Todo from "./components/Todo";
 
-const FILTER_MAP = {
-  All: () => true,
-  Active: task => !task.completed,
-  Completed: task => task.completed
-};
+export default class App extends React.Component {
+  constructor(props) 
+  {
+    super(props);
+    this.state = {
+      tasks: props.tasks,
+      filter: 'All',
+    }
 
-const FILTER_NAMES = Object.keys(FILTER_MAP);
-
-function App(props) 
-{
-  function addTask(name) {
-    const newTask = { id: "todo-" + nanoid(), name: name, completed: false };
-    setTasks([...tasks, newTask]);  
+    this.toggleTaskCompleted = this.toggleTaskCompleted.bind(this);
+    this.deleteTask = this.deleteTask.bind(this);
+    this.editTask = this.editTask.bind(this);
+    this.addTask = this.addTask.bind(this);
   }
 
-  function toggleTaskCompleted(id) 
+  addTask(name) {
+    const newTask = { id: "todo-" + nanoid(), name: name, completed: false };
+    this.setState({tasks : [...this.state.tasks, newTask]});
+  }
+
+   toggleTaskCompleted(id) 
   {
-    const updatedTasks = tasks.map(task => {
+    const updatedTasks = this.state.tasks.map(task => 
+      {
       // if this task has the same ID as the edited task
       if (id === task.id) {
         // use object spread to make a new object
@@ -32,16 +37,20 @@ function App(props)
       }
       return task;
     });
-    setTasks(updatedTasks);
+
+    this.setState({tasks : updatedTasks});
+
   }
 
-  function deleteTask(id) {
-    const remainingTasks = tasks.filter(task => id !== task.id);
-    setTasks(remainingTasks);
+   deleteTask(id) {
+    const remainingTasks = this.state.tasks.filter(task => id !== task.id);
+    this.setState({tasks : remainingTasks});
   }
 
-  function editTask(id, newName) {
-    const editedTaskList = tasks.map(task => {
+  editTask(id, newName) 
+  {
+    debugger;
+    const editedTaskList = this.state.tasks.map(task => {
     // if this task has the same ID as the edited task
       if (id === task.id) {
         //
@@ -49,57 +58,61 @@ function App(props)
       }
       return task;
     });
-    setTasks(editedTaskList);
+    this.setState({tasks : editedTaskList});
   }
 
-  const [tasks, setTasks] = useState(props.tasks);
+  render(){
 
-  const [filter, setFilter] = useState('All');
+    var FILTER_MAP = {
+      All: () => true,
+      Active: task => !task.completed,
+      Completed: task => task.completed
+    };
+    var FILTER_NAMES = Object.keys(FILTER_MAP);
 
-  const filterList = FILTER_NAMES.map(name => (
-    <FilterButton
-      key={name}
-      name={name}
-      isPressed={name === filter}
-      setFilter={setFilter}
-    />
-  ));
+    var filterList = FILTER_NAMES.map(name => (
+      <FilterButton
+        key={name}
+        name={name}
+        isPressed={name === this.state.filter}
+        setFilter={(f)=>{ this.setState({filter : f}); }}
+      />
+    ));
 
-  const taskList = tasks
-    .filter(FILTER_MAP[filter])
+    var taskList = this.state.tasks
+    .filter(FILTER_MAP[this.state.filter])
     .map(task => (
       <Todo
         id={task.id}
         name={task.name}
         completed={task.completed}
         key={task.id}
-        toggleTaskCompleted={toggleTaskCompleted}
-        deleteTask={deleteTask}
-        editTask={editTask}
+        toggleTaskCompleted={this.toggleTaskCompleted}
+        deleteTask={this.deleteTask}
+        editTask={this.editTask}
       />
     ));
 
-    const tasksNoun = taskList.length !== 1 ? 'tasks' : 'task';
-    const headingText = `${taskList.length} ${tasksNoun} remaining`;
+    var tasksNoun = taskList.length !== 1 ? 'tasks' : 'task';
+    var headingText = `${taskList.length} ${tasksNoun} remaining`;
 
-  return (
-    <div className="todoapp stack-large">
-      <h1>Todo</h1>
-      <Form addTask={addTask} />
-      <div className="filters btn-group stack-exception">
-        {filterList}
+    return (
+      <div className="todoapp stack-large">
+        <h1>Todo</h1>
+        <Form addTask={this.addTask} />
+        <div className="filters btn-group stack-exception">
+          {filterList}
+        </div>
+        <h2 id="list-heading">
+          {headingText}
+        </h2>
+        <ul
+          role="list"
+          className="todo-list stack-large stack-exception"
+          aria-labelledby="list-heading">
+          {taskList}
+        </ul>
       </div>
-      <h2 id="list-heading">
-        {headingText}
-      </h2>
-      <ul
-        role="list"
-        className="todo-list stack-large stack-exception"
-        aria-labelledby="list-heading">
-        {taskList}
-      </ul>
-    </div>
-  );
+    );
+  };
 }
-
-export default App;
