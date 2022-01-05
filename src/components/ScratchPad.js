@@ -21,19 +21,18 @@ export default class ScratchPad extends React.Component {
     this.setState({ account: accounts[0] });
     
     const todoList = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
-    this.setState({ todoList });
-
-    const taskCount = await todoList.methods.Get(this.state.account).call();
-    this.setState({ taskCount })
-    
+    //const task = await todoList.methods.Get(this.state.account).call();
+    //const tasksCounter = await todoList.methods.todoCounter().call();
     debugger;
+    //const tasks = await todoList.methods.todoCollection();
 
-    for (var i = 1; i <= taskCount; i++) {
-      const task = await todoList.methods.tasks(i).call()
-      this.setState({
-        tasks: [...this.state.tasks, task]
-      })
-    }
+    // for (var i = 1; i <= taskCount; i++) {
+    //   const task = await todoList.methods.tasks(i).call()
+    //   this.setState({
+    //     tasks: [...this.state.tasks, task]
+    //   })
+    // }
+
 }
 
   render() {

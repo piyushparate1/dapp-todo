@@ -11,7 +11,7 @@ export default class App extends React.Component {
   {
     super(props);
     this.state = {
-      tasks: props.tasks,
+      tasks: [],
       filter: 'All',
       account: '',
     }
@@ -23,13 +23,20 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    this.loadBlockchainData()
+    this.loadBlockchainData();
   }
 
-  async loadBlockchainData() {
-    const web3 = new Web3(Web3.givenProvider || "http://localhost:8545")
-    const accounts = await web3.eth.getAccounts()
-    this.setState({ account: accounts[0] })
+  async loadBlockchainData() 
+  {
+    this.state.tasks = [
+      { id: "todo-0", name: "Eat", completed: true },
+      { id: "todo-1", name: "Sleep", completed: false },
+      { id: "todo-2", name: "Repeat", completed: false }
+    ];
+
+    const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
+    const accounts = await web3.eth.getAccounts();
+    this.setState({ account: accounts[0] });
   }
 
   addTask(name) {

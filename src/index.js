@@ -5,16 +5,10 @@ import App from './App';
 import ScratchPad from './components/ScratchPad';
 import reportWebVitals from './reportWebVitals';
 
-const DATA = [
-  { id: "todo-0", name: "Eat", completed: true },
-  { id: "todo-1", name: "Sleep", completed: false },
-  { id: "todo-2", name: "Repeat", completed: false }
-];
-
 ReactDOM.render(
   <React.StrictMode>
-    <ScratchPad></ScratchPad>
-    <App tasks={DATA}/>
+    <ScratchPad/>
+    <App/>
   </React.StrictMode>,
   document.getElementById('root')
 );
