@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import ScratchPad from './components/ScratchPad';
 import reportWebVitals from './reportWebVitals';
 
 const DATA = [
@@ -12,6 +13,7 @@ const DATA = [
 
 ReactDOM.render(
   <React.StrictMode>
+    <ScratchPad></ScratchPad>
     <App tasks={DATA}/>
   </React.StrictMode>,
   document.getElementById('root')
