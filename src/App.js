@@ -4,6 +4,7 @@ import React from "react";
 import Form from "./components/Form";
 import FilterButton from "./components/FilterButton";
 import Todo from "./components/Todo";
+import Web3 from "web3";
 
 export default class App extends React.Component {
   constructor(props) 
@@ -12,12 +13,23 @@ export default class App extends React.Component {
     this.state = {
       tasks: props.tasks,
       filter: 'All',
+      account: '',
     }
 
     this.toggleTaskCompleted = this.toggleTaskCompleted.bind(this);
     this.deleteTask = this.deleteTask.bind(this);
     this.editTask = this.editTask.bind(this);
     this.addTask = this.addTask.bind(this);
+  }
+
+  componentDidMount() {
+    this.loadBlockchainData()
+  }
+
+  async loadBlockchainData() {
+    const web3 = new Web3(Web3.givenProvider || "http://localhost:8545")
+    const accounts = await web3.eth.getAccounts()
+    this.setState({ account: accounts[0] })
   }
 
   addTask(name) {
@@ -94,11 +106,12 @@ export default class App extends React.Component {
     ));
 
     var tasksNoun = taskList.length !== 1 ? 'tasks' : 'task';
-    var headingText = `${taskList.length} ${tasksNoun} remaining`;
+    var headingText = `${taskList.length} ${tasksNoun}`;
 
     return (
       <div className="todoapp stack-large">
         <h1>Todo</h1>
+        <h5>{this.state.account}</h5>
         <Form addTask={this.addTask} />
         <div className="filters btn-group stack-exception">
           {filterList}
