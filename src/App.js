@@ -5,10 +5,10 @@ import Form from "./components/Form";
 import FilterButton from "./components/FilterButton";
 import Todo from "./components/Todo";
 import Web3 from "web3";
+import { TODO_LIST_ABI, TODO_LIST_ADDRESS } from './config'
 
 export default class App extends React.Component {
-  constructor(props) 
-  {
+  constructor(props) {
     super(props);
     this.state = {
       tasks: [],
@@ -20,67 +20,76 @@ export default class App extends React.Component {
     this.deleteTask = this.deleteTask.bind(this);
     this.editTask = this.editTask.bind(this);
     this.addTask = this.addTask.bind(this);
+    this.loadTask = this.loadTask.bind(this);
+    this.onAccountsChanged = this.onAccountsChanged.bind(this);
   }
 
   componentDidMount() {
-    this.loadBlockchainData();
+    this.loadTask();
+    this.onAccountsChanged();
   }
 
-  async loadBlockchainData() 
+  onAccountsChanged()
   {
-    this.state.tasks = [
-      { id: "todo-0", name: "Eat", completed: true },
-      { id: "todo-1", name: "Sleep", completed: false },
-      { id: "todo-2", name: "Repeat", completed: false }
-    ];
+    window.ethereum.on('accountsChanged', ((e) => {
+      this.loadTask();
+    }).bind(this));
+  }
 
-    const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
+  async loadTask() 
+  {
+    const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
     const accounts = await web3.eth.getAccounts();
     this.setState({ account: accounts[0] });
+
+    const todoContract = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
+    const taskList = await todoContract.methods.Get(this.state.account).call();
+
+    this.setState({
+      tasks: taskList.map(task => {
+        return { id: task.id, name: task.name, completed: task.completed };
+      }),
+    });
   }
 
   addTask(name) {
     const newTask = { id: "todo-" + nanoid(), name: name, completed: false };
-    this.setState({tasks : [...this.state.tasks, newTask]});
+    this.setState({ tasks: [...this.state.tasks, newTask] });
   }
 
-   toggleTaskCompleted(id) 
-  {
-    const updatedTasks = this.state.tasks.map(task => 
-      {
+  toggleTaskCompleted(id) {
+    const updatedTasks = this.state.tasks.map(task => {
       // if this task has the same ID as the edited task
       if (id === task.id) {
         // use object spread to make a new object
         // whose `completed` prop has been inverted
-        return {...task, completed: !task.completed}
+        return { ...task, completed: !task.completed }
       }
       return task;
     });
 
-    this.setState({tasks : updatedTasks});
-
+    this.setState({ tasks: updatedTasks });
   }
 
-   deleteTask(id) {
+  deleteTask(id) {
     const remainingTasks = this.state.tasks.filter(task => id !== task.id);
-    this.setState({tasks : remainingTasks});
+    this.setState({ tasks: remainingTasks });
   }
 
-  editTask(id, newName) 
-  {
+  editTask(id, newName) {
     debugger;
     const editedTaskList = this.state.tasks.map(task => {
-    // if this task has the same ID as the edited task
+      // if this task has the same ID as the edited task
       if (id === task.id) {
         //
-        return {...task, name: newName}
+        return { ...task, name: newName }
       }
       return task;
     });
-    this.setState({tasks : editedTaskList});
+    this.setState({ tasks: editedTaskList });
   }
 
-  render(){
+  render() {
 
     var FILTER_MAP = {
       All: () => true,
@@ -94,23 +103,23 @@ export default class App extends React.Component {
         key={name}
         name={name}
         isPressed={name === this.state.filter}
-        setFilter={(f)=>{ this.setState({filter : f}); }}
+        setFilter={(f) => { this.setState({ filter: f }); }}
       />
     ));
 
     var taskList = this.state.tasks
-    .filter(FILTER_MAP[this.state.filter])
-    .map(task => (
-      <Todo
-        id={task.id}
-        name={task.name}
-        completed={task.completed}
-        key={task.id}
-        toggleTaskCompleted={this.toggleTaskCompleted}
-        deleteTask={this.deleteTask}
-        editTask={this.editTask}
-      />
-    ));
+      .filter(FILTER_MAP[this.state.filter])
+      .map(task => (
+        <Todo
+          id={task.id}
+          name={task.name}
+          completed={task.completed}
+          key={task.id}
+          toggleTaskCompleted={this.toggleTaskCompleted}
+          deleteTask={this.deleteTask}
+          editTask={this.editTask}
+        />
+      ));
 
     var tasksNoun = taskList.length !== 1 ? 'tasks' : 'task';
     var headingText = `${taskList.length} ${tasksNoun}`;

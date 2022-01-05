@@ -15,15 +15,15 @@ export default class ScratchPad extends React.Component {
   }
 
   async loadBlockchainData() {
-    const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
+    const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
     
     const accounts = await web3.eth.getAccounts();
     this.setState({ account: accounts[0] });
     
     const todoList = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
-    //const task = await todoList.methods.Get(this.state.account).call();
+    const task = await todoList.methods.Get(this.state.account).call();
     //const tasksCounter = await todoList.methods.todoCounter().call();
-    debugger;
+    //debugger;
     //const tasks = await todoList.methods.todoCollection();
 
     // for (var i = 1; i <= taskCount; i++) {
