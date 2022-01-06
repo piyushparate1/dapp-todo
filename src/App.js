@@ -64,18 +64,14 @@ export default class App extends React.Component {
     await this.loadTask();
   }
 
-  toggleTaskCompleted(id) {
-    const updatedTasks = this.state.tasks.map(task => {
-      // if this task has the same ID as the edited task
-      if (id === task.id) {
-        // use object spread to make a new object
-        // whose `completed` prop has been inverted
-        return { ...task, completed: !task.completed }
-      }
-      return task;
-    });
+  async toggleTaskCompleted(id) {
+    
+    const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
+    const todoContract = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
 
-    this.setState({ tasks: updatedTasks });
+    await todoContract.methods.MarkComplete(id).send({from:this.state.account});
+    await this.loadTask();
+    
   }
 
   async deleteTask(id) 

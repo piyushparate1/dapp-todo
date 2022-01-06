@@ -7,6 +7,8 @@ contract Todo {
     uint32 public todoCount;
 
     event AddTask(address owner, string task);
+    event DeleteTask(address owner, uint32 taskId);
+    event MarkCompleted(address owner, uint32 taskId);
 
     struct ToDoItem {
         uint32 id;
@@ -50,6 +52,22 @@ contract Todo {
                 }
                 delete tasksOfUser[length - 1];
                 tasksOfUser.pop();
+                emit DeleteTask(msg.sender, taskId);
+                break;
+            }
+        }
+    }
+
+    function MarkComplete(uint32 taskId) public {
+        ToDoItem[] storage tasksOfUser = todoMapping[msg.sender];
+        uint256 length = tasksOfUser.length;
+
+        for (uint256 index = 0; index < length; index++) {
+            ToDoItem storage task = tasksOfUser[index];
+            if (task.id == taskId) 
+            {
+                task.completed = true;
+                emit MarkCompleted(msg.sender, taskId);
                 break;
             }
         }
