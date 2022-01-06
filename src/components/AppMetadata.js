@@ -40,6 +40,8 @@ export default class AppMetadata extends React.Component {
         <span>Account: {this.state.account}</span>
         <br></br>
         <span>Contract account: {this.state.contractAccount}</span>
+        <br></br>
+        <span>Developed by: <a target="_blank" href="https://www.linkedin.com/in/paratepiyush">Piyush Parate</a></span>
       </div>
     );
   }
