@@ -23,7 +23,6 @@ export default class App extends React.Component {
     this.addTask = this.addTask.bind(this);
     this.loadTask = this.loadTask.bind(this);
     this.onAccountsChanged = this.onAccountsChanged.bind(this);
-    //this.getTaskId = this.getTaskId.bind(this);
   }
 
   componentDidMount() {
@@ -79,13 +78,16 @@ export default class App extends React.Component {
     this.setState({ tasks: updatedTasks });
   }
 
-  deleteTask(id) {
-    const remainingTasks = this.state.tasks.filter(task => id !== task.id);
-    this.setState({ tasks: remainingTasks });
+  async deleteTask(id) 
+  {
+    const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
+    const todoContract = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
+
+    await todoContract.methods.Delete(id).send({from:this.state.account});
+    await this.loadTask();
   }
 
   editTask(id, newName) {
-    debugger;
     const editedTaskList = this.state.tasks.map(task => {
       // if this task has the same ID as the edited task
       if (id === task.id) {
