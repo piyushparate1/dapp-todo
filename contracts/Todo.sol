@@ -3,8 +3,11 @@ pragma solidity >=0.4.22 <0.9.0;
 
 contract Todo 
 {
-  mapping(address => ToDoItem[]) public todoList;
+  mapping(address => ToDoItem[]) public todoMapping;
   uint32 public todoCount;
+  string[] public todoArray;
+
+  event AddTask(address owner, string task);
 
   struct ToDoItem
   {
@@ -22,17 +25,25 @@ contract Todo
   }
 
   function Add(string memory todoContent) public
+      returns (bool status)
   {
-    todoList[msg.sender].push(ToDoItem(
+    ToDoItem memory task = ToDoItem(
       todoCount++,
       todoContent,
       false
-    ));
+    );
+
+    todoMapping[msg.sender].push(task);
+    todoArray.push(todoContent);
+
+    emit AddTask(msg.sender, todoContent);
+
+    return true;
   }
 
   function Get(address _address) public view
     returns (ToDoItem[] memory todolist)
   {
-    return todoList[_address];
+    return todoMapping[_address];
   }
 }
