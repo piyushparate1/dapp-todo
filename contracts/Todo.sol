@@ -44,27 +44,14 @@ contract Todo {
 
         for (uint256 index = 0; index < length; index++) {
             ToDoItem memory task = tasksOfUser[index];
-            if (task.id == taskId) 
-            {
-                for (uint256 i = index; i < length - 1; i++) 
-                {
+            if (task.id == taskId) {
+                for (uint256 i = index; i < length - 1; i++) {
                     tasksOfUser[i] = tasksOfUser[i + 1];
                 }
                 delete tasksOfUser[length - 1];
-                //tasksOfUser.length--;
-
+                tasksOfUser.pop();
                 break;
             }
         }
-
-        /*
-        string element = myArray[index];
-        for (uint256 i = index; i < myArray.length - 1; i++) {
-            myArray[i] = myArray[i + 1];
-        }
-        delete myArray[myArray.length - 1];
-        myArray.length--;
-        return element;
-        */
     }
 }
