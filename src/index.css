@@ -63,7 +63,7 @@ body {
 }
 @media screen and (min-width: 620px) {
   body {
-    font-size: 1.9rem;
+    font-size: 1rem;
     line-height: 1.31579;
   }
 }
@@ -136,7 +136,7 @@ body {
 }
 @media screen and (min-width: 550px) {
   .stack-small > * + * {
-    margin-top: 1.4rem;
+    margin-top: .4rem;
   }
   .stack-large > * + * {
     margin-top: 2.8rem;
@@ -191,14 +191,14 @@ body {
 [class*="__lg"] {
   display: inline-block;
   width: 100%;
-  font-size: 1.9rem;
+  font-size: 1rem;
 }
 [class*="__lg"]:not(:last-child) {
   margin-bottom: 1rem;
 }
 @media screen and (min-width: 620px) {
   [class*="__lg"] {
-    font-size: 2.4rem;
+    font-size: 1.1rem;
   }
 }
 .filters {
@@ -229,12 +229,12 @@ body {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   font-weight: 400;
-  font-size: 1.6rem;
+  font-size: 1rem;
   line-height: 1.25;
   display: block;
   position: relative;
-  min-height: 44px;
-  padding-left: 40px;
+  min-height: 22px;
+  padding-left: 20px;
   clear: left;
 }
 .c-cb > label::before,
@@ -242,8 +242,8 @@ body {
   box-sizing: border-box;
   top: -2px;
   left: -2px;
-  width: 44px;
-  height: 44px;
+  width: 22px;
+  height: 22px;
 }
 .c-cb > input[type="checkbox"] {
   -webkit-font-smoothing: antialiased;
@@ -277,13 +277,13 @@ body {
   box-sizing: content-box;
   content: "";
   position: absolute;
-  top: 11px;
-  left: 9px;
-  width: 18px;
-  height: 7px;
+  top: 5px;
+  left: 2.5px;
+  width: 12px;
+  height: 3.5px;
   transform: rotate(-45deg);
   border: solid;
-  border-width: 0 0 5px 5px;
+  border-width: 0 0 2.5px 2.5px;
   border-top-color: transparent;
   opacity: 0;
   background: transparent;
