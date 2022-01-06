@@ -1,5 +1,4 @@
 import './App.css';
-import { nanoid } from "nanoid";
 import React from "react";
 import Form from "./components/Form";
 import FilterButton from "./components/FilterButton";
