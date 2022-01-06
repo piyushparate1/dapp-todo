@@ -1,4 +1,4 @@
-export const TODO_LIST_ADDRESS = '0x3768A0eA346d4A7e14e6741ef3A674Fe00087Bdc'
+export const TODO_LIST_ADDRESS = '0x16e9b9A133bA682c13420D2B2D026CBA37Dd0d04'
 
 export const TODO_LIST_ABI = [
   {
@@ -42,6 +42,31 @@ export const TODO_LIST_ABI = [
       }
     ],
     "name": "DeleteTask",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "taskId",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "task",
+        "type": "string"
+      }
+    ],
+    "name": "EditTask",
     "type": "event"
   },
   {
@@ -204,6 +229,24 @@ export const TODO_LIST_ABI = [
       }
     ],
     "name": "MarkComplete",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "taskId",
+        "type": "uint32"
+      },
+      {
+        "internalType": "string",
+        "name": "taskContent",
+        "type": "string"
+      }
+    ],
+    "name": "Edit",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
