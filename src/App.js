@@ -83,16 +83,12 @@ export default class App extends React.Component {
     await this.loadTask();
   }
 
-  editTask(id, newName) {
-    const editedTaskList = this.state.tasks.map(task => {
-      // if this task has the same ID as the edited task
-      if (id === task.id) {
-        //
-        return { ...task, name: newName }
-      }
-      return task;
-    });
-    this.setState({ tasks: editedTaskList });
+  async editTask(id, newName) {
+    const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
+    const todoContract = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
+
+    await todoContract.methods.Edit(id, newName).send({from:this.state.account});
+    await this.loadTask();
   }
 
   render() {
