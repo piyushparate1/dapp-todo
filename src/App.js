@@ -6,6 +6,7 @@ import FilterButton from "./components/FilterButton";
 import Todo from "./components/Todo";
 import Web3 from "web3";
 import { TODO_LIST_ABI, TODO_LIST_ADDRESS } from './config'
+import AppMetadata from './components/AppMetadata';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -14,7 +15,6 @@ export default class App extends React.Component {
       tasks: [],
       filter: 'All',
       account: '',
-      contractAccount: '',
     }
 
     this.toggleTaskCompleted = this.toggleTaskCompleted.bind(this);
@@ -44,7 +44,6 @@ export default class App extends React.Component {
     this.setState({ account: accounts[0] });
 
     const todoContract = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
-    this.setState({ contractAccount: todoContract._address });
 
     const taskList = await todoContract.methods.Get(this.state.account).call();
 
@@ -129,11 +128,7 @@ export default class App extends React.Component {
     return (
       <div className="todoapp stack-large">
         <h1>Todo</h1>
-        <div>
-        <span>Account {this.state.account}</span>
-        <br></br>
-        <span>Contract account {this.state.contractAccount}</span>
-        </div>
+        <AppMetadata></AppMetadata>
         <Form addTask={this.addTask} />
         <div className="filters btn-group stack-exception">
           {filterList}
