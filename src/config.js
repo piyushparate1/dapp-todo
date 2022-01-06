@@ -1,4 +1,4 @@
-export const TODO_LIST_ADDRESS = '0xa2b7846a3867e1A19626DbB459192581fDa2D58e'
+export const TODO_LIST_ADDRESS = '0x73414e9e2E9066b8E8e089C5d29380A8a2031cb0'
 
 export const TODO_LIST_ABI = [
   {
@@ -103,13 +103,7 @@ export const TODO_LIST_ABI = [
       }
     ],
     "name": "Add",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "status",
-        "type": "bool"
-      }
-    ],
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -149,5 +143,18 @@ export const TODO_LIST_ABI = [
     "stateMutability": "view",
     "type": "function",
     "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "taskId",
+        "type": "uint32"
+      }
+    ],
+    "name": "Delete",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   }
 ];
