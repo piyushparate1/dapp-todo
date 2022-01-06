@@ -37,12 +37,10 @@ export default class AppMetadata extends React.Component {
   render() {
     return (
       <div>
-        <span>Account {this.state.account}</span>
+        <span>Account: {this.state.account}</span>
         <br></br>
-        <span>Contract account {this.state.contractAccount}</span>
+        <span>Contract account: {this.state.contractAccount}</span>
       </div>
-
-
     );
   }
 }

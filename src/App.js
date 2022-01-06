@@ -127,7 +127,6 @@ export default class App extends React.Component {
     return (
       <div className="todoapp stack-large">
         <h1>Todo</h1>
-        <AppMetadata></AppMetadata>
         <Form addTask={this.addTask} />
         <div className="filters btn-group stack-exception">
           {filterList}
@@ -141,6 +140,7 @@ export default class App extends React.Component {
           aria-labelledby="list-heading">
           {taskList}
         </ul>
+        <AppMetadata></AppMetadata>
       </div>
     );
   };
