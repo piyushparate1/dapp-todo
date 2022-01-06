@@ -14,6 +14,7 @@ export default class App extends React.Component {
       tasks: [],
       filter: 'All',
       account: '',
+      contractAccount: '',
     }
 
     this.toggleTaskCompleted = this.toggleTaskCompleted.bind(this);
@@ -22,6 +23,7 @@ export default class App extends React.Component {
     this.addTask = this.addTask.bind(this);
     this.loadTask = this.loadTask.bind(this);
     this.onAccountsChanged = this.onAccountsChanged.bind(this);
+    //this.getTaskId = this.getTaskId.bind(this);
   }
 
   componentDidMount() {
@@ -43,6 +45,8 @@ export default class App extends React.Component {
     this.setState({ account: accounts[0] });
 
     const todoContract = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
+    this.setState({ contractAccount: todoContract._address });
+
     const taskList = await todoContract.methods.Get(this.state.account).call();
 
     this.setState({
@@ -52,9 +56,13 @@ export default class App extends React.Component {
     });
   }
 
-  addTask(name) {
-    const newTask = { id: "todo-" + nanoid(), name: name, completed: false };
-    this.setState({ tasks: [...this.state.tasks, newTask] });
+  async addTask(name) 
+  {
+    const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
+    const todoContract = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
+
+    await todoContract.methods.Add(name).send({from:this.state.account});
+    await this.loadTask();
   }
 
   toggleTaskCompleted(id) {
@@ -127,7 +135,11 @@ export default class App extends React.Component {
     return (
       <div className="todoapp stack-large">
         <h1>Todo</h1>
-        <h5>{this.state.account}</h5>
+        <div>
+        <span>Account {this.state.account}</span>
+        <br></br>
+        <span>Contract account {this.state.contractAccount}</span>
+        </div>
         <Form addTask={this.addTask} />
         <div className="filters btn-group stack-exception">
           {filterList}

@@ -1,10 +1,49 @@
-export const TODO_LIST_ADDRESS = '0xD0d7180b539ff20F5E37118640d7c68CfD9f1bA8'
+export const TODO_LIST_ADDRESS = '0xa2b7846a3867e1A19626DbB459192581fDa2D58e'
 
 export const TODO_LIST_ABI = [
   {
     "inputs": [],
     "stateMutability": "nonpayable",
     "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "task",
+        "type": "string"
+      }
+    ],
+    "name": "AddTask",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "todoArray",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -33,7 +72,7 @@ export const TODO_LIST_ABI = [
         "type": "uint256"
       }
     ],
-    "name": "todoList",
+    "name": "todoMapping",
     "outputs": [
       {
         "internalType": "uint32",
@@ -64,7 +103,13 @@ export const TODO_LIST_ABI = [
       }
     ],
     "name": "Add",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "status",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
