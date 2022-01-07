@@ -13,6 +13,7 @@ export default class App extends React.Component {
       tasks: [],
       filter: 'All',
       account: '',
+      isCompatible: false,
     }
 
     this.toggleTaskCompleted = this.toggleTaskCompleted.bind(this);
@@ -23,20 +24,53 @@ export default class App extends React.Component {
     this.onAccountsChanged = this.onAccountsChanged.bind(this);
   }
 
-  componentDidMount() {
-    this.loadTask();
-    this.onAccountsChanged();
+  async componentDidMount() {
+
+    await this.IdentifyCompatible();
+
+    if (this.state.isCompatible) {
+      this.loadTask();
+      this.onAccountsChanged();
+    }
   }
 
-  onAccountsChanged()
-  {
+  async IdentifyCompatible() {
+    // Modern dapp browsers...
+    if (window.ethereum) {
+      window.web3 = new Web3(window.ethereum);
+      try {
+        // Request account access if needed
+        await window.ethereum.enable();
+        // Acccounts now exposed
+        //web3.eth.sendTransaction({/* ... */ });
+
+        this.setState({ isCompatible: true });
+
+      } catch (error) {
+        // User denied account access...
+      }
+    }
+    // Legacy dapp browsers...
+    else if (window.web3) {
+      window.web3 = new Web3(window.web3.currentProvider);
+      // Acccounts always exposed
+      //web3.eth.sendTransaction({/* ... */ });
+      this.setState({ isCompatible: true });
+
+    }
+    // Non-dapp browsers...
+    else {
+      this.setState({ isCompatible: false });
+    }
+  }
+
+  onAccountsChanged() {
     window.ethereum.on('accountsChanged', ((e) => {
       this.loadTask();
     }).bind(this));
   }
 
-  async loadTask() 
-  {
+  async loadTask() {
     const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
     const accounts = await web3.eth.getAccounts();
     this.setState({ account: accounts[0] });
@@ -52,31 +86,29 @@ export default class App extends React.Component {
     });
   }
 
-  async addTask(name) 
-  {
+  async addTask(name) {
     const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
     const todoContract = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
 
-    await todoContract.methods.Add(name).send({from:this.state.account});
+    await todoContract.methods.Add(name).send({ from: this.state.account });
     await this.loadTask();
   }
 
   async toggleTaskCompleted(id) {
-    
+
     const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
     const todoContract = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
 
-    await todoContract.methods.MarkComplete(id).send({from:this.state.account});
+    await todoContract.methods.MarkComplete(id).send({ from: this.state.account });
     await this.loadTask();
-    
+
   }
 
-  async deleteTask(id) 
-  {
+  async deleteTask(id) {
     const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
     const todoContract = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
 
-    await todoContract.methods.Delete(id).send({from:this.state.account});
+    await todoContract.methods.Delete(id).send({ from: this.state.account });
     await this.loadTask();
   }
 
@@ -84,7 +116,7 @@ export default class App extends React.Component {
     const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
     const todoContract = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
 
-    await todoContract.methods.Edit(id, newName).send({from:this.state.account});
+    await todoContract.methods.Edit(id, newName).send({ from: this.state.account });
     await this.loadTask();
   }
 
@@ -124,22 +156,24 @@ export default class App extends React.Component {
     var headingText = `${taskList.length} ${tasksNoun}`;
 
     return (
-      <div className="appcontainer stack-large">
-        <h1>Todo</h1>
-        <Form addTask={this.addTask} />
-        <div className="filters btn-group stack-exception">
-          {filterList}
+      this.state.isCompatible ?
+        <div className="appcontainer stack-large">
+          <h1>Todo</h1>
+          <Form addTask={this.addTask} />
+          <div className="filters btn-group stack-exception">
+            {filterList}
+          </div>
+          <h2 id="list-heading">
+            {headingText}
+          </h2>
+          <ul
+            role="list"
+            className="todo-list stack-large stack-exception"
+            aria-labelledby="list-heading">
+            {taskList}
+          </ul>
         </div>
-        <h2 id="list-heading">
-          {headingText}
-        </h2>
-        <ul
-          role="list"
-          className="todo-list stack-large stack-exception"
-          aria-labelledby="list-heading">
-          {taskList}
-        </ul>
-      </div>
+        : ""
     );
   };
 }

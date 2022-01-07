@@ -8,23 +8,27 @@ export default class AppMetadata extends React.Component {
     this.state = {
       account: '',
       contractAccount: '',
+      isCompatible: false,
     }
   }
 
-  componentDidMount() {
-    this.loadAccountDetails();
-    this.onAccountsChanged();
+  async componentDidMount() {
+
+    await this.IdentifyCompatible();
+
+    if (this.state.isCompatible) {
+      this.loadAccountDetails();
+      this.onAccountsChanged();
+    }
   }
 
-  onAccountsChanged()
-  {
+  onAccountsChanged() {
     window.ethereum.on('accountsChanged', ((e) => {
       this.loadAccountDetails();
     }).bind(this));
   }
 
-  async loadAccountDetails() 
-  {
+  async loadAccountDetails() {
     const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
     const accounts = await web3.eth.getAccounts();
     this.setState({ account: accounts[0] });
@@ -33,16 +37,49 @@ export default class AppMetadata extends React.Component {
     this.setState({ contractAccount: todoContract._address });
   }
 
+  async IdentifyCompatible() {
+    // Modern dapp browsers...
+    if (window.ethereum) {
+      window.web3 = new Web3(window.ethereum);
+      try {
+        // Request account access if needed
+        await window.ethereum.enable();
+        // Acccounts now exposed
+        //web3.eth.sendTransaction({/* ... */ });
+
+        this.setState({ isCompatible: true });
+
+      } catch (error) {
+        // User denied account access...
+      }
+    }
+    // Legacy dapp browsers...
+    else if (window.web3) {
+      window.web3 = new Web3(window.web3.currentProvider);
+      // Acccounts always exposed
+      //web3.eth.sendTransaction({/* ... */ });
+      this.setState({ isCompatible: true });
+
+    }
+    // Non-dapp browsers...
+    else {
+      this.setState({ isCompatible: false });
+    }
+  }
+
   render() {
     return (
-      <div className="appcontainer">
-        <span>Account: {this.state.account}</span>
-        <br></br>
-        <span>Contract: {this.state.contractAccount}</span>
-        <br></br>
-        <span>Creator: <a target="_blank" href="https://www.linkedin.com/in/paratepiyush">Piyush Parate</a> (<a href="mailto:piyushparate1@gmail.com">piyushparate1@gmail.com</a>)</span>
-        <br></br>
-      </div>
+      this.state.isCompatible ?
+        <div className="appcontainer">
+          <span>Account: {this.state.account}</span>
+          <br></br>
+          <span>Contract: {this.state.contractAccount}</span>
+          <br></br>
+          <span>Creator: <a target="_blank" href="https://www.linkedin.com/in/paratepiyush">Piyush Parate</a> (<a href="mailto:piyushparate1@gmail.com">piyushparate1@gmail.com</a>)</span>
+          <br></br>
+        </div>
+        :
+        <div className="appcontainer">Non-Ethereum browser detected. You should consider trying MetaMask!</div>
     );
   }
 }

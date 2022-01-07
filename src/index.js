@@ -8,9 +8,9 @@ import AppMetadata from './components/AppMetadata';
 
 ReactDOM.render(
   <React.StrictMode>
-      {/* <ScratchPad /> */}
-      <App />
-      <AppMetadata></AppMetadata>
+    {/* <ScratchPad /> */}
+    <App />
+    <AppMetadata />
   </React.StrictMode>,
   document.getElementById('root')
 );
