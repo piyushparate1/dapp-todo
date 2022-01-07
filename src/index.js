@@ -4,11 +4,13 @@ import './index.css';
 import App from './App';
 import ScratchPad from './components/ScratchPad';
 import reportWebVitals from './reportWebVitals';
+import { MainContext } from "./contexts/MainContext";
+
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* <ScratchPad/> */}
-    <App/>
+      {/* <ScratchPad /> */}
+      <App />
   </React.StrictMode>,
   document.getElementById('root')
 );
