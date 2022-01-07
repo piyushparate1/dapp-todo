@@ -146,7 +146,7 @@ body {
   margin-top: 1.2rem;
 }
 /* END GLOBAL STYLES */
-.todoapp {
+.appcontainer {
   background: #fff;
   margin: 2rem 0 4rem 0;
   padding: 1rem;
@@ -154,19 +154,19 @@ body {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 2.5rem 5rem 0 rgba(0, 0, 0, 0.1);
 }
 @media screen and (min-width: 550px) {
-  .todoapp {
+  .appcontainer {
     padding: 4rem;
   }
 }
-.todoapp > * {
+.appcontainer > * {
   max-width: 50rem;
   margin-left: auto;
   margin-right: auto;
 }
-.todoapp > form {
+.appcontainer > form {
   max-width: 100%;
 }
-.todoapp > h1,h5 {
+.appcontainer > h1,h5 {
   display: block;
   max-width: 100%;
   text-align: center;

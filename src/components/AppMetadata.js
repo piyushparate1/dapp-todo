@@ -2,7 +2,6 @@ import React from "react";
 import Web3 from "web3";
 import { TODO_LIST_ABI, TODO_LIST_ADDRESS } from '../config'
 
-
 export default class AppMetadata extends React.Component {
   constructor(props) {
     super(props);
@@ -36,12 +35,13 @@ export default class AppMetadata extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="appcontainer">
         <span>Account: {this.state.account}</span>
         <br></br>
-        <span>Contract account: {this.state.contractAccount}</span>
+        <span>Contract: {this.state.contractAccount}</span>
         <br></br>
-        <span>Developed by: <a target="_blank" href="https://www.linkedin.com/in/paratepiyush">Piyush Parate</a></span>
+        <span>Creator: <a target="_blank" href="https://www.linkedin.com/in/paratepiyush">Piyush Parate</a> (<a href="mailto:piyushparate1@gmail.com">piyushparate1@gmail.com</a>)</span>
+        <br></br>
       </div>
     );
   }

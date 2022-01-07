@@ -5,7 +5,6 @@ import FilterButton from "./components/FilterButton";
 import Todo from "./components/Todo";
 import Web3 from "web3";
 import { TODO_LIST_ABI, TODO_LIST_ADDRESS } from './config'
-import AppMetadata from './components/AppMetadata';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -125,7 +124,7 @@ export default class App extends React.Component {
     var headingText = `${taskList.length} ${tasksNoun}`;
 
     return (
-      <div className="todoapp stack-large">
+      <div className="appcontainer stack-large">
         <h1>Todo</h1>
         <Form addTask={this.addTask} />
         <div className="filters btn-group stack-exception">
@@ -140,7 +139,6 @@ export default class App extends React.Component {
           aria-labelledby="list-heading">
           {taskList}
         </ul>
-        <AppMetadata></AppMetadata>
       </div>
     );
   };

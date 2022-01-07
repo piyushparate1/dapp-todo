@@ -4,11 +4,13 @@ import './index.css';
 import App from './App';
 import ScratchPad from './components/ScratchPad';
 import reportWebVitals from './reportWebVitals';
+import AppMetadata from './components/AppMetadata';
 
 ReactDOM.render(
   <React.StrictMode>
       {/* <ScratchPad /> */}
       <App />
+      <AppMetadata></AppMetadata>
   </React.StrictMode>,
   document.getElementById('root')
 );
