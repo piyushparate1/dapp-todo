@@ -4,13 +4,14 @@ import './index.css';
 import App from './App';
 import ScratchPad from './components/ScratchPad';
 import reportWebVitals from './reportWebVitals';
-import { MainContext } from "./contexts/MainContext";
-
+import { MainContextProvider } from "./contexts/MainContext";
 
 ReactDOM.render(
   <React.StrictMode>
-      {/* <ScratchPad /> */}
+    <MainContextProvider value={{name : "dapp Todo"}}>
+      <ScratchPad />
       <App />
+    </MainContextProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

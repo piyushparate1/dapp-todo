@@ -1,5 +1,8 @@
 import React from "react";
 
-export const MainContext = React.createContext({ default : "value" });
+export const MainContext = React.createContext();
 
-export default { MainContext };
+export const MainContextProvider = MainContext.Provider;
+export const MainContextConsumer = MainContext.Consumer;
+
+export default MainContext;
