@@ -1,45 +1,51 @@
 import React from "react";
-import Web3 from "web3";
-import { TODO_LIST_ABI, TODO_LIST_ADDRESS } from '../config'
+import { MainContext } from "../contexts/MainContext";
+import { useContext } from "react";
 
 export default class ScratchPad extends React.Component {
+  static contextType = MainContext;
+
   constructor(props) {
     super(props);
-    this.state = {
-      account: '',
-    }
+    this.state = {}
+    //const theme = useContext(ThemeContext);
+    debugger;
   }
 
   componentDidMount() {
-    this.loadBlockchainData();
+    const context = this.context;
+    const theme = useContext(MainContext);
+    debugger;
+    /* perform a side-effect at mount using the value of UserContext */
+  }
+  componentDidUpdate() {
+    let value = this.context;
+    //const theme = useContext(ThemeContext);
+    //debugger;
+    /* ... */
+  }
+  componentWillUnmount() {
+    let value = this.context;
+    //const theme = useContext(ThemeContext);
+    //debugger;
+
+    /* ... */
   }
 
-  async loadBlockchainData() {
-    const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
-    
-    const accounts = await web3.eth.getAccounts();
-    this.setState({ account: accounts[0] });
-    
-    const todoList = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
-    const task = await todoList.methods.Get(this.state.account).call();
-    //const tasksCounter = await todoList.methods.todoCounter().call();
-    //debugger;
-    //const tasks = await todoList.methods.todoCollection();
-
-    // for (var i = 1; i <= taskCount; i++) {
-    //   const task = await todoList.methods.tasks(i).call()
-    //   this.setState({
-    //     tasks: [...this.state.tasks, task]
-    //   })
-    // }
-
-}
-
   render() {
+    let value = this.context;
+    //const theme = useContext(ThemeContext);
+    debugger;
+
+    /* render something based on the value of UserContext */
+
     return (
       <span>
         <br></br>
-        <h5>{this.state.account}</h5>
+        <hr></hr>
+        <h5>ScratchPad</h5>
+        <hr></hr>
+        <br></br>
       </span>
     );
   }
