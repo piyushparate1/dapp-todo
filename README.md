@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Live
 
-[https://rough-boat-6173.on.fleek.co](https://rough-boat-6173.on.fleek.co)
+[https://dapp-todo.on.fleek.co](https://dapp-todo.on.fleek.co)
 
 ## Available Scripts
 
