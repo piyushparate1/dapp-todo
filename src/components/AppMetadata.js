@@ -1,6 +1,6 @@
 import React from "react";
 import Web3 from "web3";
-import { TODO_LIST_ABI, TODO_LIST_ADDRESS } from '../config'
+import TodoContract from '../contracts/Todo.json';
 
 export default class AppMetadata extends React.Component {
   constructor(props) {
@@ -33,7 +33,11 @@ export default class AppMetadata extends React.Component {
     const accounts = await web3.eth.getAccounts();
     this.setState({ account: accounts[0] });
 
-    const todoContract = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
+    const networkId = await web3.eth.net.getId();
+    const deployedNetwork = TodoContract.networks[networkId];
+    if (!deployedNetwork || !deployedNetwork.address) return;
+
+    const todoContract = new web3.eth.Contract(TodoContract.abi, deployedNetwork.address);
     this.setState({ contractAccount: todoContract._address });
   }
 
@@ -71,6 +75,10 @@ export default class AppMetadata extends React.Component {
     return (
       this.state.isCompatible ?
         <div className="appcontainer">
+                    <b><span>Make sure you are connected to Ropsten network in MetaMask.</span></b>
+
+                    <br></br>
+
           <span>Account: {this.state.account}</span>
           <br></br>
           <span>Contract: {this.state.contractAccount}</span>
@@ -79,7 +87,7 @@ export default class AppMetadata extends React.Component {
           <br></br>
         </div>
         :
-        <div className="appcontainer">Non-Ethereum browser detected. You should consider trying MetaMask!</div>
+        <div className="appcontainer">Non-Ethereum browser detected. You should consider trying MetaMask and Ropsten network!</div>
     );
   }
 }

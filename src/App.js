@@ -4,7 +4,7 @@ import Form from "./components/Form";
 import FilterButton from "./components/FilterButton";
 import Todo from "./components/Todo";
 import Web3 from "web3";
-import { TODO_LIST_ABI, TODO_LIST_ADDRESS } from './config'
+import TodoContract from './contracts/Todo.json';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -74,8 +74,11 @@ export default class App extends React.Component {
     const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
     const accounts = await web3.eth.getAccounts();
     this.setState({ account: accounts[0] });
+    const networkId = await web3.eth.net.getId();
+    const deployedNetwork = TodoContract.networks[networkId];
+    if (!deployedNetwork || !deployedNetwork.address) return;
 
-    const todoContract = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
+    const todoContract = new web3.eth.Contract(TodoContract.abi, deployedNetwork.address);
 
     const taskList = await todoContract.methods.Get(this.state.account).call();
 
@@ -88,7 +91,11 @@ export default class App extends React.Component {
 
   async addTask(name) {
     const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
-    const todoContract = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
+    const networkId = await web3.eth.net.getId();
+    const deployedNetwork = TodoContract.networks[networkId];
+    if (!deployedNetwork || !deployedNetwork.address) return;
+
+    const todoContract = new web3.eth.Contract(TodoContract.abi, deployedNetwork.address);
 
     await todoContract.methods.Add(name).send({ from: this.state.account });
     await this.loadTask();
@@ -97,7 +104,11 @@ export default class App extends React.Component {
   async toggleTaskCompleted(id) {
 
     const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
-    const todoContract = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
+    const networkId = await web3.eth.net.getId();
+    const deployedNetwork = TodoContract.networks[networkId];
+    if (!deployedNetwork || !deployedNetwork.address) return;
+
+    const todoContract = new web3.eth.Contract(TodoContract.abi, deployedNetwork.address);
 
     await todoContract.methods.MarkComplete(id).send({ from: this.state.account });
     await this.loadTask();
@@ -106,7 +117,11 @@ export default class App extends React.Component {
 
   async deleteTask(id) {
     const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
-    const todoContract = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
+    const networkId = await web3.eth.net.getId();
+    const deployedNetwork = TodoContract.networks[networkId];
+    if (!deployedNetwork || !deployedNetwork.address) return;
+
+    const todoContract = new web3.eth.Contract(TodoContract.abi, deployedNetwork.address);
 
     await todoContract.methods.Delete(id).send({ from: this.state.account });
     await this.loadTask();
@@ -114,7 +129,11 @@ export default class App extends React.Component {
 
   async editTask(id, newName) {
     const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
-    const todoContract = new web3.eth.Contract(TODO_LIST_ABI, TODO_LIST_ADDRESS);
+    const networkId = await web3.eth.net.getId();
+    const deployedNetwork = TodoContract.networks[networkId];
+    if (!deployedNetwork || !deployedNetwork.address) return;
+
+    const todoContract = new web3.eth.Contract(TodoContract.abi, deployedNetwork.address);
 
     await todoContract.methods.Edit(id, newName).send({ from: this.state.account });
     await this.loadTask();
